@@ -1,0 +1,14 @@
+{
+  "name": "4u7o",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.6.3"
+  }
+}
