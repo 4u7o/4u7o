@@ -32,5 +32,8 @@
     "rootDir": ".",
     "baseUrl": "./src",
 
+    "paths": {
+      "4u7o": [ "./index.ts" ]
+    }
   }
 }

@@ -1,7 +1,16 @@
 {
   "name": "4u7o",
-  "module": "index.ts",
+  "module": "app.ts",
   "type": "module",
+  "license": "MIT",
+  "author": {
+    "email": "ddquangbao@gmail.com",
+    "name": "quangpao",
+    "url": "https://facebook.com/quangpou"
+  },
+  "scripts": {
+    "dev": "bun --watch app.ts"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
