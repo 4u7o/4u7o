@@ -7,8 +7,16 @@ services:
       context: "."
       dockerfile: .docker/bun/Dockerfile
     command: bun run dev
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
     volumes:
-      - ./:/app
       - /app/node_modules
     networks:
       - 4u7o-network
