@@ -1,0 +1,40 @@
+services:
+
+  # Main Server Container
+  bun:
+    container_name: 4u7o-server
+    build:
+      context: "."
+      dockerfile: .docker/bun/Dockerfile
+    command: bun run dev
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    networks:
+      - 4u7o-network
+
+  # Redis Container
+  redis:
+    container_name: 4u7o-cache
+    image: redis:7.4
+    command:
+      - /bin/sh
+      - -c
+      - redis-server --requirepass "${REDIS_PASSWORD:?REDIS_PASSWORD variable is not set}"
+    ports:
+      - "6379:6379"
+    networks:
+      - 4u7o-network
+
+  # Database Container
+  mongo:
+    container_name: 4u7o-database
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+
+networks:
+  4u7o-network:
+    driver: bridge
