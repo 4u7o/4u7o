@@ -1,0 +1,15 @@
+name: Bun-Build
+on: [pull_request]
+jobs:
+  build:
+    name: build-app
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Install Bun (v1)
+        uses: oven-sh/setup-bun@v2
+      - name: Install dependencies
+        run: bun install
+      - name: Check for linting, formatting, and type errors
+        run: bun run ci
