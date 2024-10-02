@@ -1,0 +1,40 @@
+services:
+
+  # Main Server Container
+  bun:
+    container_name: 4u7o-server
+    build:
+      context: "."
+      dockerfile: .docker/bun/Dockerfile
+    command: bun run dev
+    # develop:
+    #   watch:
+    #     - action: sync
+    #       path: ./src
+    #       target: /app/src
+    #       ignore:
+    #         - node_modules/
+    #     - action: rebuild
+    #       path: package.json
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    networks:
+      - 4u7o-network
+
+  # Redis Container
+  redis:
+    container_name: 4u7o-cache
+    image: redis:7.4
+    command:
+      - /bin/sh
+      - -c
+      - redis-server --requirepass "${REDIS_PASSWORD:?REDIS_PASSWORD variable is not set}"
+    ports:
+      - "6379:6379"
+    networks:
+      - 4u7o-network
+
+networks:
+  4u7o-network:
+    driver: bridge
