@@ -12,7 +12,6 @@
     "start": "bun app.ts",
     "dev": "bun --watch app.ts",
     "ci": "eslint"
-
   },
   "devDependencies": {
     "@eslint/js": "^9.11.1",
@@ -22,14 +21,15 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "prettier": "^3.3.3",
-    "prisma": "^5.20.0",
+    "prisma": "5.20.0",
     "typescript-eslint": "^8.8.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@prisma/client": "^5.20.0",
+    "@prisma/client": "5.20.0",
+    "discord.js": "^14.16.3",
     "tslib": "^2.6.3"
   }
 }
