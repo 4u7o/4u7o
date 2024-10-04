@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@prisma/client": "5.20.0",
+    "dayjs": "^1.11.13",
     "discord.js": "^14.16.3",
     "tslib": "^2.6.3"
   }
