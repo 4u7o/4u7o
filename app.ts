@@ -1,3 +1,4 @@
-import { X } from "4u7o";
+import { _4u7oClient } from "4u7o";
 
-console.log("Hello via Bun!", X);
+const client = new _4u7oClient();
+client.login();
