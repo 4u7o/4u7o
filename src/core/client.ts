@@ -33,9 +33,13 @@ export class _4u7oClient extends Client<boolean> {
    */
   override login(token?: string): Promise<string> {
     //Initial modules,...
-    logger.info("Hello World");
-    logger.error(new Error("hello error"), { data: "nothing", number: 1 });
     token = token || config.discord.TOKEN_ID;
     return super.login(token);
+  }
+
+  private initEvents() {
+    this.on("ready", () => {
+      logger.info("The bot has been ready!");
+    });
   }
 }
