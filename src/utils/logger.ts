@@ -15,11 +15,7 @@ class _4u7oWebhook extends WebhookClient {
     return this.instance;
   }
 
-  private formatMessage(
-    level: LogLevel,
-    message: string,
-    context?: unknown,
-  ): string {
+  private formatMessage(level: LogLevel, message: string, context?: unknown): string {
     const timestamp = dayts.now();
     let formattedMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}`;
     if (context) {
@@ -48,9 +44,7 @@ class _4u7oWebhook extends WebhookClient {
 
   error(message: unknown, context?: unknown) {
     const errorMessage =
-      message instanceof Error
-        ? `${message.message}\n${message.stack}`
-        : (message as string);
+      message instanceof Error ? `${message.message}\n${message.stack}` : (message as string);
     this.log(LogLevel.ERROR, errorMessage, context);
   }
 }

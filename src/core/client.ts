@@ -38,23 +38,26 @@ export class _4u7oClient extends Client<boolean> {
    */
   override login(token?: string): Promise<string> {
     //Initial modules,...
+    this.loadModules();
     token = token || config.discord.TOKEN_ID;
     return super.login(token);
   }
 
   public loadModules() {
-    const moduleDir = path.resolve(__dirname, "modules");
+    const moduleDir = path.resolve(process.cwd(), "src/modules");
     const moduleFiles = fs.readdirSync(moduleDir);
-    logger.info(`${moduleFiles.length} modules have been loaded`, moduleFiles);
+    logger.info(`${moduleFiles.length} modules have been detected`, moduleFiles);
 
     moduleFiles.forEach(async (file) => {
-      const modulePath = path.join(moduleDir, file);
-      const mod: Module = (await import(modulePath)).default;
+      try {
+        const modulePath = path.join(moduleDir, file);
+        const mod: Module = (await import(modulePath)).default;
 
-      mod.load();
-      this.modules.set(mod.name, mod);
-
-      logger.info(`Loaded module: ${mod.name}`);
+        mod.load();
+        this.modules.set(mod.name, mod);
+      } catch (error) {
+        logger.error(`Failed to load module: ${file}`, error);
+      }
     });
   }
 
