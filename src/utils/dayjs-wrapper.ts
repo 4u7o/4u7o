@@ -1,6 +1,8 @@
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 
+dayjs.extend(utc);
 dayjs.extend(timezone);
 
 class DayjsWrapper {
@@ -14,7 +16,7 @@ class DayjsWrapper {
   }
 
   now(): string {
-    return this.dayjsInstance().format(this.defaultFormat);
+    return this.dayjsInstance().tz().format(this.defaultFormat);
   }
 
   getInstance(): typeof dayjs {
