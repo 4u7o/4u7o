@@ -14,12 +14,21 @@ datasource db {
 }
 
 model Guild {
-  id          String   @id
-  djRoles     String[]
+  id              String   @id
+  djRoles         String[]
   allowDjOnlyFlag Boolean  @default(false)
 }
 
 model User {
   id       String   @id
   joinedAt DateTime @default(now())
+}
+
+model BotSettings {
+  id          Int      @id @default(autoincrement())
+  key         String   @unique
+  value       String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
