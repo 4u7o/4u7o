@@ -4,11 +4,12 @@ import path from "node:path";
 import fs from "node:fs";
 import { Client, GatewayIntentBits } from "discord.js";
 import DisTube from "distube";
+import { CommandMap } from "4u7o";
 
 export class _4u7oClient extends Client<boolean> {
   private modules: Map<string, Module> = new Map();
   public distube: DisTube | undefined;
-
+  public commands: CommandMap = new CommandMap();
   constructor() {
     super({
       intents: [
