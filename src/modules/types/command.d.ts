@@ -8,7 +8,7 @@ interface Command {
     category: string;
     aliases: string[];
   };
-  execute: (interaction: Interaction) => Promise<void>;
+  execute: (interaction: Interaction, client: _4u7oClient) => Promise<void>;
 }
 
 export interface SlashCommand extends Command {
