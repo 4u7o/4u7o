@@ -8,7 +8,7 @@ RUN apt-get install -y \
     build-essential \
     libtool \
     automake \
-    python \
+    python3 \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
