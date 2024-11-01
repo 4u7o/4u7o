@@ -1,11 +1,11 @@
-import type { Command, SlashCommand } from "4u7o";
+import type { Command } from "4u7o";
 
-class CommandMap extends Map<string, SlashCommand | Command> {
-  public override set(key: string, value: SlashCommand | Command): this {
+class CommandMap extends Map<string, Command> {
+  public override set(key: string, value: Command): this {
     return super.set(key, value);
   }
 
-  public override get(key: string): SlashCommand | Command | undefined {
+  public override get(key: string): Command | undefined {
     return super.get(key);
   }
 
