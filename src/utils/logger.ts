@@ -1,5 +1,11 @@
-import { dayts, config, Const, LogLevel } from "4u7o";
+import { dayts, config } from "4u7o";
 import { WebhookClient } from "discord.js";
+
+enum LogLevel {
+  INFO = "info",
+  WARN = "warn",
+  ERROR = "error",
+}
 
 class _4u7oWebhook extends WebhookClient {
   private static instance: _4u7oWebhook;
@@ -33,8 +39,8 @@ class _4u7oWebhook extends WebhookClient {
     const formattedMessage = this.formatMessage(level, message, context);
     this.send({
       content: formattedMessage,
-      username: Const.WEBHOOK_USERNAME,
-      avatarURL: Const.WEBHOOK_AVATAR_URL,
+      username: "Logger",
+      avatarURL: "https://i.imgur.com/AfFp7pu.png",
     });
   }
 
