@@ -45,7 +45,6 @@ export class _4u7oClient extends Client<boolean> {
   public loadModules() {
     const moduleDir = path.resolve(__dirname, "modules");
     const moduleFiles = fs.readdirSync(moduleDir);
-    logger.info(`${moduleFiles.length} modules have been loaded`, moduleFiles);
 
     moduleFiles.forEach(async (file) => {
       const modulePath = path.join(moduleDir, file);
