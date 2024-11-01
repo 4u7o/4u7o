@@ -3,3 +3,7 @@ export enum LogLevel {
   WARN = "warn",
   ERROR = "error",
 }
+
+export enum CommandType {
+  Slash = "slash",
+}

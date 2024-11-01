@@ -1,5 +1,5 @@
-import { config, logger } from "4u7o";
-import type { Module } from "4u7o";
+import { CommandType, config, logger } from "4u7o";
+import type { Module, SlashCommand } from "4u7o";
 import path from "node:path";
 import fs from "node:fs";
 import { Client, GatewayIntentBits } from "discord.js";
@@ -17,11 +17,11 @@ export class _4u7oClient extends Client<boolean> {
         GatewayIntentBits.DirectMessageTyping,
         GatewayIntentBits.DirectMessagePolls,
         GatewayIntentBits.DirectMessages,
-
         GatewayIntentBits.GuildEmojisAndStickers,
         GatewayIntentBits.GuildMessageReactions,
         GatewayIntentBits.GuildMessageTyping,
         GatewayIntentBits.GuildMessagePolls,
+        GatewayIntentBits.GuildVoiceStates,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMembers,
         GatewayIntentBits.Guilds,
@@ -39,14 +39,35 @@ export class _4u7oClient extends Client<boolean> {
    * @override
    * @param token
    */
-  override login(token?: string): Promise<string> {
+  override async login(token?: string): Promise<string> {
     //Initial modules,...
-    this.loadModules();
+    await this.loadModules();
+    await this.loadEvents();
     token = token || config.discord.TOKEN_ID;
     return super.login(token);
   }
 
-  public loadModules() {
+  public async loadEvents() {
+    this.on("interactionCreate", async (interaction) => {
+      try {
+        let triggered;
+        if (interaction.isChatInputCommand()) {
+          triggered = this.commands.get(
+            `${interaction.commandName}_${CommandType.Slash}`,
+          ) as SlashCommand;
+          await triggered.execute(interaction, this);
+        }
+
+        if (!triggered) {
+          throw new Error(`Cannot find the command meet the interaction`, { cause: interaction });
+        }
+      } catch (error) {
+        logger.error(`An error occured when trigger interaction`, error);
+      }
+    });
+  }
+
+  public async loadModules() {
     const moduleDir = path.resolve(process.cwd(), "src/modules");
     const moduleFiles = fs.readdirSync(moduleDir);
     logger.info(`${moduleFiles.length} modules have been detected`, moduleFiles);
@@ -59,7 +80,7 @@ export class _4u7oClient extends Client<boolean> {
         mod.load(this);
         this.modules.set(mod.name, mod);
       } catch (error) {
-        logger.error(`Failed to load module: ${file}`, error);
+        logger.error(error, { message: `Failed to load module: ${file}` });
       }
     });
   }
