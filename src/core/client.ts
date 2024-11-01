@@ -3,11 +3,9 @@ import type { Module } from "4u7o";
 import path from "node:path";
 import fs from "node:fs";
 import { Client, GatewayIntentBits } from "discord.js";
-import DisTube from "distube";
 
 export class _4u7oClient extends Client<boolean> {
   private modules: Map<string, Module> = new Map();
-  public distube: DisTube | undefined;
 
   constructor() {
     super({
@@ -55,7 +53,7 @@ export class _4u7oClient extends Client<boolean> {
         const modulePath = path.join(moduleDir, file);
         const mod: Module = (await import(modulePath)).default;
 
-        mod.load(this);
+        mod.load();
         this.modules.set(mod.name, mod);
       } catch (error) {
         logger.error(`Failed to load module: ${file}`, error);

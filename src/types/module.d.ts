@@ -1,6 +1,6 @@
 export interface Module {
   name: string;
-  load: (client?: _4u7oClient) => void;
+  load: () => void;
   reload: () => void;
   unload: () => void;
 }
