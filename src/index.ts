@@ -8,7 +8,8 @@ export { config } from "config/config";
 /** TYPE Mapping exported */
 export type * from "types/config";
 export type * from "types/module";
-export type * from "modules/types/command";
+export type * from "types";
+export * from "types/command";
 
 /** CUSTOME exported */
 export { logger } from "utils/logger";
