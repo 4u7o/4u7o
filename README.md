@@ -4,7 +4,6 @@
 - Enormous changes (feat 🎉)
 - Changes (chore 📌)
 - Fix (fix 🛠/🐞)
-- Refactor (refactor 🧩)
 
 #### Run the project
 ```sh

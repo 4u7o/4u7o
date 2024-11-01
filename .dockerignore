@@ -13,6 +13,3 @@ helm-charts
 .editorconfig
 .idea
 coverage*
-
-# Explicitly include music_ytb-cookies.json
-!/app/src/modules/music_ytb-cookies.json
