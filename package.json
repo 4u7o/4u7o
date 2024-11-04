@@ -19,7 +19,9 @@
     "@prisma/client",
     "@prisma/engines",
     "prisma",
-    "libsodium-wrappers"
+    "libsodium-wrappers",
+    "sodium-native",
+    "@distube/yt-dlp"
   ],
   "devDependencies": {
     "@eslint/js": "^9.11.1",
@@ -38,15 +40,19 @@
   "dependencies": {
     "@discordjs/opus": "^0.9.0",
     "@discordjs/voice": "^0.17.0",
+    "@distube/direct-link": "^1.0.1",
+    "@distube/file": "^1.0.1",
     "@distube/soundcloud": "^2.0.3",
     "@distube/spotify": "^2.0.2",
     "@distube/youtube": "^1.0.4",
+    "@distube/yt-dlp": "^2.0.1",
     "@distube/ytdl-core": "latest",
     "@prisma/client": "5.20.0",
     "dayjs": "^1.11.13",
     "discord.js": "^14.16.3",
     "distube": "^5.0.2",
     "libsodium-wrappers": "^0.7.15",
+    "sodium-native": "^4.2.1",
     "tslib": "^2.6.3"
   }
 }
