@@ -1,5 +1,10 @@
 import type { _4u7oClient, CommandType } from "4u7o";
-import type { ChatInputCommandInteraction, Interaction, InteractionResponse } from "discord.js";
+import type {
+  ChatInputCommandInteraction,
+  Interaction,
+  InteractionResponse,
+  Message,
+} from "discord.js";
 
 export interface CommandInfo {
   name: string;
@@ -18,3 +23,8 @@ export type ExecuteCIIFunction = (
   interaction: ChatInputCommandInteraction,
   client: _4u7oClient,
 ) => Promise<InteractionResponse<boolean> | undefined>;
+
+export type MessageExecuteFunction = (
+  message: Message,
+  client: _4u7oClient,
+) => Promise<OmitPartialGroupDMChannel<Message<boolean>> | undefined>;
