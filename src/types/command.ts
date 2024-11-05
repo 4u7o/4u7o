@@ -1,5 +1,5 @@
 import type { SlashCommandBuilder, SlashCommandOptionsOnlyBuilder } from "discord.js";
-import type { CommandInfo, ExecuteCIIFunction } from ".";
+import type { CommandInfo, ExecuteCIIFunction, MessageExecuteFunction } from ".";
 
 export interface Command {
   info: CommandInfo;
@@ -18,13 +18,16 @@ export abstract class BaseCommand implements Command {
 export class SlashCommand extends BaseCommand {
   public builder: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder;
   execute: ExecuteCIIFunction;
+  messageExecute?: MessageExecuteFunction;
   constructor(
     info: CommandInfo,
     builder: SlashCommandBuilder | SlashCommandOptionsOnlyBuilder,
     execute: ExecuteCIIFunction,
+    messageExecute?: MessageExecuteFunction,
   ) {
     super(info);
     this.execute = execute;
     this.builder = builder;
+    this.messageExecute = messageExecute;
   }
 }
