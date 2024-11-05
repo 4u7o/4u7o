@@ -1,15 +1,15 @@
-import { CommandType, config, logger } from "4u7o";
-import type { Module, SlashCommand } from "4u7o";
+import { CommandTrie, config, logger } from "4u7o";
+import type { Module } from "4u7o";
 import path from "node:path";
 import fs from "node:fs";
 import { Client, GatewayIntentBits } from "discord.js";
 import DisTube from "distube";
-import { CommandMap } from "4u7o";
+import { clientEventLoader } from "events/client";
 
 export class _4u7oClient extends Client<boolean> {
   private modules: Map<string, Module> = new Map();
   public distube: DisTube | undefined;
-  public commands: CommandMap = new CommandMap();
+  public commands: CommandTrie = new CommandTrie();
   constructor() {
     super({
       intents: [
@@ -17,6 +17,7 @@ export class _4u7oClient extends Client<boolean> {
         GatewayIntentBits.DirectMessageTyping,
         GatewayIntentBits.DirectMessagePolls,
         GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.MessageContent,
         GatewayIntentBits.GuildEmojisAndStickers,
         GatewayIntentBits.GuildMessageReactions,
         GatewayIntentBits.GuildMessageTyping,
@@ -48,23 +49,7 @@ export class _4u7oClient extends Client<boolean> {
   }
 
   public async loadEvents() {
-    this.on("interactionCreate", async (interaction) => {
-      try {
-        let triggered;
-        if (interaction.isChatInputCommand()) {
-          triggered = this.commands.get(
-            `${interaction.commandName}_${CommandType.Slash}`,
-          ) as SlashCommand;
-          await triggered.execute(interaction, this);
-        }
-
-        if (!triggered) {
-          throw new Error(`Cannot find the command meet the interaction`, { cause: interaction });
-        }
-      } catch (error) {
-        logger.error(`An error occured when trigger interaction`, error);
-      }
-    });
+    await clientEventLoader(this);
   }
 
   public async loadModules() {
