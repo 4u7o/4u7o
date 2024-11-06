@@ -1,0 +1,12 @@
+{
+  "apps": [
+    {
+      "name": "4u7o-develop",
+      "script": "app.ts",
+      "exec_interpreter": "bun",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}
