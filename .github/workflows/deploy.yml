@@ -1,0 +1,95 @@
+name: CI/CD workflow
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    name: build-app
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Install Bun (v2)
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Check for linting, formatting, and type errors
+        run: bun run ci
+
+      - name: Save Bun Version
+        run: echo "bun_version=$(bun --version)" >> $GITHUB_ENV
+
+      # Upload Artifact for deployment
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app
+          path: ./
+
+  deploy:
+    name: deploy-app
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: app
+          path: /app
+
+      - name: Prepare SSH key
+        run: |
+          set -e
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSHKEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+          # Add custom SSH config entry
+          echo "Host 4u7o-develop" >> ~/.ssh/config
+          echo "  HostName ${{ secrets.HOST }}" >> ~/.ssh/config
+          echo "  User ${{ secrets.USER }}" >> ~/.ssh/config
+          echo "  IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
+          echo "  StrictHostKeyChecking no" >> ~/.ssh/config
+
+          # Add GitHub to known hosts to avoid SSH prompt
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+        shell: bash
+
+      - name: Sync Files to VPS
+        run: |
+          rsync -avz --exclude 'node_modules' --exclude '.git' --exclude '.github' /app 4u7o-develop:/app
+        shell: bash
+
+      - name: Deploy to VPS
+        run: |
+          ssh 4u7o-develop << 'EOF'
+            export BUN_INSTALL="$HOME/.bun"
+            export PATH="$BUN_INSTALL/bin:$PATH"
+
+            # Check Bun version and upgrade if needed
+            VPS_BUN_VERSION=$(bun --version)
+            GITHUB_BUN_VERSION="${{ env.bun_version }}"
+            echo "GitHub Actions Bun Version: $GITHUB_BUN_VERSION"
+            echo "VPS Bun Version: $VPS_BUN_VERSION"
+
+            if [ "$GITHUB_BUN_VERSION" != "$VPS_BUN_VERSION" ]; then
+              echo "Upgrading Bun on VPS..."
+              bun upgrade
+            fi
+
+            # Install production dependencies
+            cd /app
+            bun install --production || exit 1
+
+            # Start or restart the application with PM2 using ecosystem.config.json
+            pm2 startOrRestart /app/ecosystem.config.json || exit 1
+          EOF
+        shell: bash
+  
