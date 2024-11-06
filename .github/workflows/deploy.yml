@@ -54,7 +54,7 @@ jobs:
           # Add custom SSH config entry
           echo "Host 4u7o-develop" >> ~/.ssh/config
           echo "  HostName ${{ secrets.HOST }}" >> ~/.ssh/config
-          echo "  User ${{ secrets.USER }}" >> ~/.ssh/config
+          echo "  User ${{ secrets.USERNAME }}" >> ~/.ssh/config
           echo "  IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
           echo "  StrictHostKeyChecking no" >> ~/.ssh/config
 
