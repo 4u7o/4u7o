@@ -64,7 +64,7 @@ jobs:
 
       - name: Sync Files to VPS
         run: |
-          rsync -avz --exclude 'node_modules' --exclude '.git' --exclude '.github' ./app 4u7o-develop:/app
+          rsync -avz --exclude 'node_modules' --exclude '.git' --exclude '.github' ./app/ 4u7o-develop:/app
         shell: bash
 
       - name: Deploy to VPS
