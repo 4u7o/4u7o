@@ -1,3 +1,6 @@
 [submodule "src/modules/music"]
 	path = src/modules/music
 	url = https://github.com/4u7o/4u7o-music.git
+[submodule "study-assist"]
+	path = src/modules/study-assist
+	url = https://github.com/4u7o/study-assist.git
