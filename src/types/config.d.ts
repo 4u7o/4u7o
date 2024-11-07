@@ -9,10 +9,19 @@ export interface SpotifyConfig {
   CLIENT_SECRET: string;
 }
 
+export interface OracleConfig {
+  region: string;
+  bucketName: string;
+  bucketUrl: string;
+  bucketPARWrite: string;
+  bucketPARName: string;
+}
+
 export interface AppConfig {
   NODE_ENV: "development" | "production" | "test";
   discord: DiscordConfig;
   spotify: SpotifyConfig;
+  oracle: OracleConfig;
 }
 
 export interface ProcessVariables extends NodeJS.ProcessEnv {
@@ -22,4 +31,10 @@ export interface ProcessVariables extends NodeJS.ProcessEnv {
   DISCORD_WEBHOOK_URL: string;
   SPOTIFY_CLIENT_ID: string;
   SPOTIFY_CLIENT_SECRET: string;
+  OPENAI_API_KEY: string;
+  ORACLE_REGION: string;
+  ORACLE_BUCKET: string;
+  ORACLE_BUCKET_URL: string;
+  ORACLE_BUCKET_PAR_NAME: string;
+  ORACLE_BUCKET_PAR_WRITE: string;
 }
