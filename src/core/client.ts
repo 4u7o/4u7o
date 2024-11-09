@@ -5,9 +5,11 @@ import fs from "node:fs";
 import { Client, GatewayIntentBits } from "discord.js";
 import DisTube from "distube";
 import { clientEventLoader } from "events/client";
+import { ApplicationsAPI } from "@discordjs/core";
 
 export class _4u7oClient extends Client<boolean> {
   private modules: Map<string, Module> = new Map();
+  public applicationAPI: ApplicationsAPI | undefined;
   public distube: DisTube | undefined;
   public commands: CommandTrie = new CommandTrie();
   constructor() {
@@ -33,6 +35,7 @@ export class _4u7oClient extends Client<boolean> {
       },
       failIfNotExists: true,
     });
+    this.token = config.discord.TOKEN_ID;
   }
 
   /**
@@ -40,19 +43,23 @@ export class _4u7oClient extends Client<boolean> {
    * @override
    * @param token
    */
-  override async login(token?: string): Promise<string> {
+  override async login(): Promise<string> {
     //Initial modules,...
     await this.loadModules();
     await this.loadEvents();
-    token = token || config.discord.TOKEN_ID;
-    return super.login(token);
+    await this.loadApplicationAPI();
+    return super.login();
   }
 
-  public async loadEvents() {
+  private async loadApplicationAPI() {
+    this.applicationAPI = new ApplicationsAPI(this.rest);
+  }
+
+  private async loadEvents() {
     await clientEventLoader(this);
   }
 
-  public async loadModules() {
+  private async loadModules() {
     const moduleDir = path.resolve(process.cwd(), "src/modules");
     const moduleFiles = fs.readdirSync(moduleDir);
     logger.info(`${moduleFiles.length} modules have been detected`, moduleFiles);
