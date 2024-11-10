@@ -1,8 +1,10 @@
-import { _4u7oClient, logger, type Module } from "4u7o";
+import { _4u7oClient, logger, SlashCommand, type Module } from "4u7o";
+import { readdirSync } from "node:fs";
 import { EventEmitter } from "events";
 
 export abstract class BaseModule implements Module {
   public abstract name: string;
+  public abstract dirName: string;
   private eventEmitter = new EventEmitter();
 
   constructor() {
@@ -45,6 +47,34 @@ export abstract class BaseModule implements Module {
       logger.info(`Starting ${action} module: ${moduleName}`);
     } else if (phase === "end") {
       logger.info(`Completed ${action} module: ${moduleName}`);
+    }
+  }
+
+  public async loadCommands(client: _4u7oClient): Promise<void> {
+    logger.info("Loading commands");
+    const folders = readdirSync(`${this.dirName}/commands`, { withFileTypes: true }).filter(
+      (folder) => folder.isDirectory(),
+    );
+
+    for (const folder of folders) {
+      const files = readdirSync(`${this.dirName}/commands/${folder.name}`, {
+        withFileTypes: true,
+      }).filter((file) => file.isFile() && file.name.endsWith(".ts"));
+
+      const commandList = [];
+
+      for (const file of files) {
+        try {
+          const command = (await import(`${this.dirName}/commands/${folder.name}/${file.name}`))
+            .default as SlashCommand;
+          client.commands.insertCommand(command);
+          commandList.push(command);
+        } catch (error) {
+          logger.error(error, {
+            message: `Failed to load command: ${file.name}`,
+          });
+        }
+      }
     }
   }
 }
